@@ -2,14 +2,15 @@
   max-width: 522px;
   margin: auto;
 }
-
 .info {
   margin: 4px 0px 0px 16px;
   text-align: left;
 }
 .circles {
-  margin: 120px 0px 0px 0px;
+  margin: 48px 0px 0px 0px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
+  row-gap: 48px;
+  column-gap: 16px;
 }

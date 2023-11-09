@@ -1,57 +1,59 @@
 import React from 'react'
-import { SolutionLayout } from '../ui/solution-layout/solution-layout'
-import { Input } from '../ui/input/input'
-import { Button } from '../ui/button/button'
-import styles from './string.module.css'
-import { Circle } from '../ui/circle/circle'
 import { ElementStates } from '../../types/element-states'
+import { Circle } from '../ui/circle/circle'
+import Form from '../ui/form/form'
+import { SolutionLayout } from '../ui/solution-layout/solution-layout'
+import styles from './string.module.css'
 
 export const StringComponent: React.FC = () => {
   const [inputValue, setInputValue] = React.useState('')
   const [createArray, setCreateArray] = React.useState<string[]>([])
   const [reverseArray, setReverseArray] = React.useState(createArray)
-  const [done, setDone] = React.useState(true)
+  const [isDone, setIsDone] = React.useState(true)
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
-  }
-
-  const handleClickButton = () => {
+  const handleClickSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setCreateArray(inputValue.split(''))
     setReverseArray([])
-    setDone(false)
+    setIsDone(false)
   }
 
   React.useEffect(() => {
     setTimeout(() => {
       const newTextArray = [...createArray]
-      swapElements(newTextArray)
+      algorithmSwapItem(newTextArray)
     }, 1000)
   }, [createArray])
 
-  const swapElements = (arr: string[], start = 0, end = arr.length - 1) => {
+  const algorithmSwapItem = (
+    arr: string[],
+    start = 0,
+    end = arr.length - 1
+  ) => {
     if (start >= end) {
-      setDone(true)
+      setIsDone(true)
       return arr
     }
     ;[arr[start], arr[end]] = [arr[end], arr[start]]
 
     setReverseArray([...arr])
-    setTimeout(() => swapElements(arr, start + 1, end - 1), 1000)
+    setTimeout(() => algorithmSwapItem(arr, start + 1, end - 1), 1000)
   }
+
+  const disabledButton = !inputValue || inputValue.length > 11
 
   return (
     <SolutionLayout title='Строка'>
       <div className={styles.content}>
-        <div className={styles.wrapper}>
-          <Input onChange={handleChangeInput} value={inputValue} />
-          <Button
-            disabled={inputValue.length > 11}
-            isLoader={!done}
-            onClick={handleClickButton}
-            text='Развернуть'
-          />
-        </div>
+        <Form
+          onSubmit={handleClickSubmit}
+          onChange={setInputValue}
+          inputValue={inputValue}
+          loaderButton={isDone}
+          typeInput='text'
+          disabled={disabledButton}
+          textButton='Развернуть'
+        />
         <p className={styles.info}>Максимум — 11 символов</p>
       </div>
       <div className={styles.circles}>
@@ -59,7 +61,7 @@ export const StringComponent: React.FC = () => {
           ? reverseArray.map((text, i) => (
               <Circle
                 state={
-                  reverseArray[i] !== createArray[i] || done
+                  reverseArray[i] !== createArray[i] || isDone
                     ? ElementStates.Modified
                     : reverseArray[i - 1] === createArray[i - 1] &&
                       reverseArray[i + 1] === createArray[i + 1]
