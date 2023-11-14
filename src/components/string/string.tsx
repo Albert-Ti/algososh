@@ -4,6 +4,7 @@ import { Circle } from '../ui/circle/circle'
 import Form from '../ui/form/form'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './string.module.css'
+import { swap } from '../../utils'
 
 export const StringComponent: React.FC = () => {
   const [inputValue, setInputValue] = React.useState('')
@@ -21,30 +22,26 @@ export const StringComponent: React.FC = () => {
   React.useEffect(() => {
     setTimeout(() => {
       const newTextArray = [...createArray]
-      algorithmSwapItem(newTextArray)
+      swapItem(newTextArray)
     }, 1000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createArray])
 
-  const algorithmSwapItem = (
-    arr: string[],
-    start = 0,
-    end = arr.length - 1
-  ) => {
+  const swapItem = (arr: string[], start = 0, end = arr.length - 1) => {
     if (start >= end) {
       setIsDone(true)
       return arr
     }
-    ;[arr[start], arr[end]] = [arr[end], arr[start]]
-
+    swap<string>(arr, start, end)
     setReverseArray([...arr])
-    setTimeout(() => algorithmSwapItem(arr, start + 1, end - 1), 1000)
+    setTimeout(() => swapItem(arr, start + 1, end - 1), 1000)
   }
 
   const disabledButton = !inputValue || inputValue.length > 11
 
   return (
     <SolutionLayout title='Строка'>
-      <div className={styles.content}>
+      <div className={styles.form}>
         <Form
           onSubmit={handleClickSubmit}
           onChange={setInputValue}

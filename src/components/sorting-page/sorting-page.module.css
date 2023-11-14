@@ -1,0 +1,29 @@
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selection {
+  display: flex;
+  gap: 40px;
+}
+
+.sort {
+  display: flex;
+  gap: 12px;
+  margin: 0px 80px 0px 42px;
+}
+
+.column {
+  height: 340px;
+  margin: 48px 0px 0px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 10px;
+}
+
+.button {
+  width: 205px;
+}

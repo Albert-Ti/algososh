@@ -12,10 +12,10 @@ export const FibonacciPage: React.FC = () => {
   const handleClickSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsDone(false)
-    algorithmFibonacci(+inputValue)
+    fibonacci(+inputValue)
   }
 
-  const algorithmFibonacci = (n: number) => {
+  const fibonacci = (n: number) => {
     let arr: number[] = [0, 1]
     let index = 0
     const resultFibonacci = (i: number) => {
@@ -35,7 +35,7 @@ export const FibonacciPage: React.FC = () => {
   const disabledButton = +inputValue > 19 || +inputValue <= 0
   return (
     <SolutionLayout title='Последовательность Фибоначчи'>
-      <div className={styles.content}>
+      <div className={styles.form}>
         <Form
           onSubmit={handleClickSubmit}
           onChange={setInputValue}
