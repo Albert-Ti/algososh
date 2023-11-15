@@ -1,0 +1,30 @@
+.content {
+  max-width: 828px;
+  margin: auto;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.input {
+  max-width: 377px;
+}
+
+.clear {
+  margin-left: 68px;
+}
+
+.info {
+  margin: 4px 0px 0px 0px;
+  text-align: start;
+}
+
+.circle {
+  margin: 48px 0px 0px 0px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}

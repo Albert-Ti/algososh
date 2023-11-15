@@ -41,7 +41,7 @@ export const StringComponent: React.FC = () => {
 
   return (
     <SolutionLayout title='Строка'>
-      <div className={styles.form}>
+      <div className={styles.content}>
         <Form
           onSubmit={handleClickSubmit}
           onChange={setInputValue}
