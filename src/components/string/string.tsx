@@ -58,7 +58,8 @@ export const StringComponent: React.FC = () => {
           ? reverseArray.map((text, i) => (
               <Circle
                 state={
-                  reverseArray[i] !== createArray[i] || isDone
+                  (createArray.length && reverseArray[i] !== createArray[i]) ||
+                  isDone
                     ? ElementStates.Modified
                     : reverseArray[i - 1] === createArray[i - 1] &&
                       reverseArray[i + 1] === createArray[i + 1]

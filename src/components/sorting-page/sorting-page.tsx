@@ -5,7 +5,7 @@ import { Button } from '../ui/button/button'
 import { Column } from '../ui/column/column'
 import { RadioInput } from '../ui/radio-input/radio-input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
-import { bubbleSort, selectionSort } from './algorithms'
+import { bubbleSort, selectionSort } from './utils'
 import styles from './sorting-page.module.css'
 import { TAlgorithmStarted, TColumn } from './types'
 

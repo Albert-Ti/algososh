@@ -1,40 +1,40 @@
 import React from 'react'
-import { SolutionLayout } from '../ui/solution-layout/solution-layout'
-import { Input } from '../ui/input/input'
-import { Button } from '../ui/button/button'
-import styles from './stack-page.module.css'
-import { Circle } from '../ui/circle/circle'
-import { stack } from './utils'
 import { ElementStates } from '../../types/element-states'
 import { timeout } from '../../utils'
+import { Button } from '../ui/button/button'
+import { Circle } from '../ui/circle/circle'
+import { Input } from '../ui/input/input'
+import { SolutionLayout } from '../ui/solution-layout/solution-layout'
+import styles from './stack-page.module.css'
+import { stack } from './utils'
 
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = React.useState('')
   const [createArray, setCreateArray] = React.useState<string[]>([])
-  const [changeState, setChengeState] = React.useState<ElementStates>()
+  const [changeState, setChangeState] = React.useState<ElementStates>()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     stack.push(inputValue)
     setCreateArray([...stack.container])
-    setChengeState(ElementStates.Changing)
+
+    setChangeState(ElementStates.Changing)
     await timeout(500)
-    setChengeState(ElementStates.Default)
+    setChangeState(ElementStates.Default)
+
     setInputValue('')
   }
 
   const removeItem = async () => {
     stack.pop()
     setCreateArray([...stack.container])
-    setChengeState(ElementStates.Changing)
+    setChangeState(ElementStates.Changing)
     await timeout(500)
-    setChengeState(ElementStates.Default)
+    setChangeState(ElementStates.Default)
   }
 
   const clearItems = () => {
-    setCreateArray([])
-    stack.container = []
+    stack.clear()
   }
 
   return (

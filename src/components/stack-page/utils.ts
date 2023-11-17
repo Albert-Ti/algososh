@@ -3,6 +3,7 @@ interface IStack<T> {
   pop: () => void
   peak: () => T | null
   getSize: () => number
+  clear: () => void
 }
 
 class Stack<T> implements IStack<T> {
@@ -20,6 +21,8 @@ class Stack<T> implements IStack<T> {
     return this.container[this.getSize() - 1]
   }
   getSize = () => this.container.length
+
+  clear = () => (this.container = [])
 }
 
 export const stack = new Stack<string>()
