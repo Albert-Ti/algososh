@@ -172,7 +172,7 @@ export const ListPage: React.FC = () => {
     return ElementStates.Default
   }
 
-  const hieCirclePropsValue = (index: number, value: string) => {
+  const hideCirclePropsValue = (index: number, value: string) => {
     if (isAction.remove.head && index === 0) {
       return ''
     }
@@ -266,7 +266,7 @@ export const ListPage: React.FC = () => {
               index={isAction.add.tail || isAction.remove.tail ? undefined : i}
               head={addCircleHeadSmall(i, item.value)}
               tail={addCircleTailSmall(i, item.value)}
-              letter={hieCirclePropsValue(i, item.value)}
+              letter={hideCirclePropsValue(i, item.value)}
               state={changeCirclePropsState(i)}
             />
             {item.next && <ArrowIcon />}
