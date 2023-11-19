@@ -17,6 +17,7 @@ interface ILinkedList<T> {
   insertByIndex: (element: T, index: number) => void
   removeByIndex: (index: number) => void
   getSize: () => number
+  randomList: () => void
   toArray: () => Node<T>[]
 }
 
@@ -134,6 +135,17 @@ class LinkedList<T> implements ILinkedList<T> {
 
   getSize() {
     return this.size
+  }
+
+  randomList() {
+    if (this.head) return
+
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    for (let i = 0; i < 5; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length)
+      const randomChar: unknown = characters.charAt(randomIndex)
+      this.append(randomChar as T)
+    }
   }
 
   toArray() {

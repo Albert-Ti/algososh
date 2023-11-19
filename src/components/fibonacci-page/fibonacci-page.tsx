@@ -1,18 +1,21 @@
 import React from 'react'
-import { SolutionLayout } from '../ui/solution-layout/solution-layout'
-import Form from '../ui/form/form'
-import styles from './fibonacci-page.module.css'
+import { useForm } from '../../hooks'
+import { Button } from '../ui/button/button'
 import { Circle } from '../ui/circle/circle'
+import { Input } from '../ui/input/input'
+import { SolutionLayout } from '../ui/solution-layout/solution-layout'
+import styles from './fibonacci-page.module.css'
 
 export const FibonacciPage: React.FC = () => {
-  const [inputValue, setInputValue] = React.useState('')
+  const { values, handleChange } = useForm({ fib: '' })
+
   const [resultArray, setResultArray] = React.useState<number[]>([])
   const [isDone, setIsDone] = React.useState(true)
 
   const handleClickSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsDone(false)
-    fibonacci(+inputValue)
+    fibonacci(+values.fib)
   }
 
   const fibonacci = (n: number) => {
@@ -32,20 +35,26 @@ export const FibonacciPage: React.FC = () => {
     resultFibonacci(index)
   }
 
-  const disabledButton = +inputValue > 19 || +inputValue <= 0
+  const disabledButton = +values.fib > 19 || +values.fib <= 0
   return (
     <SolutionLayout title='Последовательность Фибоначчи'>
-      <div className={styles.form}>
-        <Form
-          onSubmit={handleClickSubmit}
-          onChange={setInputValue}
-          typeInput='number'
-          inputValue={inputValue}
-          disabled={disabledButton}
-          loaderButton={isDone}
-          textButton='Рассчитать'
-        />
-        <p className={styles.info}>Максимальное число — 19</p>
+      <div className={styles.content}>
+        <form onSubmit={handleClickSubmit} className={styles.form}>
+          <Input
+            name='fib'
+            value={values.fib}
+            onChange={handleChange}
+            isLimitText={true}
+            max={19}
+            type='number'
+          />
+          <Button
+            disabled={disabledButton}
+            isLoader={!isDone}
+            text='Рассчитать'
+            type='submit'
+          />
+        </form>
       </div>
       <div className={styles.circles}>
         {resultArray.map((num, i) => (

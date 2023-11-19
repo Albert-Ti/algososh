@@ -1,11 +1,19 @@
-.form {
+.content {
   max-width: 522px;
   margin: auto;
 }
+
+.form {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+}
+
 .info {
   margin: 4px 0px 0px 16px;
   text-align: left;
 }
+
 .circles {
   margin: 48px 0px 0px 0px;
   display: flex;

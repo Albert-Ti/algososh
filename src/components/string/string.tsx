@@ -1,20 +1,23 @@
 import React from 'react'
+import { useForm } from '../../hooks'
 import { ElementStates } from '../../types/element-states'
+import { swap } from '../../utils'
+import { Button } from '../ui/button/button'
 import { Circle } from '../ui/circle/circle'
-import Form from '../ui/form/form'
+import { Input } from '../ui/input/input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './string.module.css'
-import { swap } from '../../utils'
 
 export const StringComponent: React.FC = () => {
-  const [inputValue, setInputValue] = React.useState('')
+  const { values, handleChange } = useForm({ string: '' })
+
   const [createArray, setCreateArray] = React.useState<string[]>([])
   const [reverseArray, setReverseArray] = React.useState(createArray)
   const [isDone, setIsDone] = React.useState(true)
 
   const handleClickSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setCreateArray(inputValue.split(''))
+    setCreateArray(values.string.split(''))
     setReverseArray([])
     setIsDone(false)
   }
@@ -37,21 +40,26 @@ export const StringComponent: React.FC = () => {
     setTimeout(() => swapItem(arr, start + 1, end - 1), 1000)
   }
 
-  const disabledButton = !inputValue || inputValue.length > 11
+  const disabledButton = !values.string || values.string.length > 11
 
   return (
     <SolutionLayout title='Строка'>
       <div className={styles.content}>
-        <Form
-          onSubmit={handleClickSubmit}
-          onChange={setInputValue}
-          inputValue={inputValue}
-          loaderButton={isDone}
-          typeInput='text'
-          disabled={disabledButton}
-          textButton='Развернуть'
-        />
-        <p className={styles.info}>Максимум — 11 символов</p>
+        <form onSubmit={handleClickSubmit} className={styles.form}>
+          <Input
+            name='string'
+            value={values.string}
+            onChange={handleChange}
+            isLimitText={true}
+            maxLength={11}
+          />
+          <Button
+            disabled={disabledButton}
+            isLoader={!isDone}
+            text='Развернуть'
+            type='submit'
+          />
+        </form>
       </div>
       <div className={styles.circles}>
         {reverseArray.length

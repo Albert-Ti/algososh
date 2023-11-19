@@ -1,4 +1,5 @@
 import React from 'react'
+import { useForm } from '../../hooks'
 import { ElementStates } from '../../types/element-states'
 import { timeout } from '../../utils'
 import { Button } from '../ui/button/button'
@@ -11,7 +12,7 @@ import { TIsAction } from './types'
 import { counter, list, Node } from './utils'
 
 export const ListPage: React.FC = () => {
-  const [inputValue, setInputValue] = React.useState({ list: '', index: '' })
+  const { values, setValues, handleChange } = useForm({ list: '', index: '' })
   const [createArray, setCreateArray] = React.useState<Node<string>[]>([])
   const [isAction, setIsAction] = React.useState<TIsAction>({
     add: { head: false, tail: false },
@@ -24,39 +25,44 @@ export const ListPage: React.FC = () => {
   })
   const [countForIndex, setCountForIndex] = React.useState(0)
 
+  React.useEffect(() => {
+    list.randomList()
+    setCreateArray([...list.toArray()])
+  }, [])
+
   const addByIndex = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsActionOnIndex({ ...isActionOnIndex, add: true })
 
-    if (+inputValue.index < createArray.length) {
-      await counter(+inputValue.index, setCountForIndex)
+    if (+values.index < createArray.length) {
+      await counter(+values.index, setCountForIndex)
       await timeout(1000)
-      list.insertByIndex(inputValue.list, +inputValue.index)
+      list.insertByIndex(values.list, +values.index)
       setCreateArray([...list.toArray()])
     }
 
     setCountForIndex(0)
-    setInputValue({ list: '', index: '' })
+    setValues({ list: '', index: '' })
     setIsActionOnIndex({ ...isActionOnIndex, add: false })
   }
 
   const removeByIndex = async () => {
     setIsActionOnIndex({ ...isActionOnIndex, remove: true })
 
-    if (+inputValue.index < createArray.length) {
-      await counter(+inputValue.index, setCountForIndex)
+    if (+values.index < createArray.length) {
+      await counter(+values.index, setCountForIndex)
       await timeout(1000)
-      list.removeByIndex(+inputValue.index)
+      list.removeByIndex(+values.index)
       setCreateArray([...list.toArray()])
     }
 
     setCountForIndex(0)
-    setInputValue({ list: '', index: '' })
+    setValues({ list: '', index: '' })
     setIsActionOnIndex({ ...isActionOnIndex, remove: false })
   }
 
   const addToHead = async () => {
-    list.preppend(inputValue.list)
+    list.preppend(values.list)
 
     setIsAction({ ...isAction, add: { head: true } })
     await timeout(1000)
@@ -67,12 +73,12 @@ export const ListPage: React.FC = () => {
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { head: false } })
 
-    setInputValue({ list: '', index: '' })
+    setValues({ list: '', index: '' })
   }
 
   const addToTail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    list.append(inputValue.list)
+    list.append(values.list)
 
     setIsAction({ ...isAction, add: { tail: true } })
     await timeout(1000)
@@ -83,7 +89,7 @@ export const ListPage: React.FC = () => {
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { tail: false } })
 
-    setInputValue({ list: '', index: '' })
+    setValues({ list: '', index: '' })
   }
 
   const deleteInHead = async () => {
@@ -107,7 +113,7 @@ export const ListPage: React.FC = () => {
       return isAction.add.head || isAction.remove.head ? (
         <Circle
           state={ElementStates.Changing}
-          letter={isAction.add.head ? inputValue.list : value}
+          letter={isAction.add.head ? values.list : value}
           isSmall={true}
         />
       ) : (
@@ -118,7 +124,7 @@ export const ListPage: React.FC = () => {
       return isActionOnIndex.add ? (
         <Circle
           state={ElementStates.Changing}
-          letter={isActionOnIndex.add ? inputValue.list : value}
+          letter={isActionOnIndex.add ? values.list : value}
           isSmall={true}
         />
       ) : (
@@ -129,8 +135,8 @@ export const ListPage: React.FC = () => {
   }
 
   const addCircleTailSmall = (index: number, value: string) => {
-    if (index === +inputValue.index) {
-      return isActionOnIndex.remove && countForIndex === +inputValue.index ? (
+    if (index === +values.index) {
+      return isActionOnIndex.remove && countForIndex === +values.index ? (
         <Circle state={ElementStates.Changing} letter={value} isSmall={true} />
       ) : (
         ''
@@ -140,7 +146,7 @@ export const ListPage: React.FC = () => {
       return isAction.add.tail || isAction.remove.tail ? (
         <Circle
           state={ElementStates.Changing}
-          letter={isAction.add.tail ? inputValue.list : value}
+          letter={isAction.add.tail ? values.list : value}
           isSmall={true}
         />
       ) : (
@@ -175,8 +181,8 @@ export const ListPage: React.FC = () => {
     }
     if (
       isActionOnIndex.remove &&
-      index === +inputValue.index &&
-      countForIndex === +inputValue.index
+      index === +values.index &&
+      countForIndex === +values.index
     ) {
       return ''
     }
@@ -188,23 +194,22 @@ export const ListPage: React.FC = () => {
       <div className={styles.content}>
         <form onSubmit={addToTail} className={styles.form}>
           <Input
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setInputValue({ ...inputValue, list: e.target.value })
-            }
-            value={inputValue.list}
+            name='list'
+            onChange={handleChange}
+            value={values.list}
             isLimitText={true}
             maxLength={4}
             extraClass={styles.input}
           />
           <Button
-            disabled={!inputValue.list || inputValue.index ? true : false}
+            disabled={!values.list || values.index ? true : false}
             onClick={addToHead}
             text='Добавить в head'
             extraClass={styles.button}
             isLoader={isAction.add.head}
           />
           <Button
-            disabled={!inputValue.list || inputValue.index ? true : false}
+            disabled={!values.list || values.index ? true : false}
             type='submit'
             text='Добавить в tail'
             extraClass={styles.button}
@@ -227,23 +232,26 @@ export const ListPage: React.FC = () => {
         </form>
         <form onSubmit={addByIndex} className={styles.form}>
           <Input
-            value={inputValue.index}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setInputValue({ ...inputValue, index: e.target.value })
-            }
+            name='index'
+            value={values.index}
+            onChange={handleChange}
             type='number'
             placeholder='Введите индекс'
             extraClass={styles.input}
           />
           <Button
-            disabled={!inputValue.list || !inputValue.index}
+            disabled={
+              !values.list ||
+              !values.index ||
+              +values.index > createArray.length - 1
+            }
             type='submit'
             text='Добавить по индексу'
             extraClass={styles.button}
             isLoader={isActionOnIndex.add}
           />
           <Button
-            disabled={!inputValue.index}
+            disabled={!values.index || +values.index > createArray.length - 1}
             onClick={removeByIndex}
             text='Удалить по индексу'
             extraClass={styles.button}

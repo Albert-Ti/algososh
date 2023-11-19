@@ -1,13 +1,12 @@
 import React from 'react'
 import { Direction } from '../../types/direction'
-import { ElementStates } from '../../types/element-states'
 import { Button } from '../ui/button/button'
 import { Column } from '../ui/column/column'
 import { RadioInput } from '../ui/radio-input/radio-input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
-import { bubbleSort, selectionSort } from './utils'
 import styles from './sorting-page.module.css'
 import { TAlgorithmStarted, TColumn } from './types'
+import { bubbleSort, randomArray, selectionSort } from './utils'
 
 export const SortingPage: React.FC = () => {
   const [createArray, setCreateArray] = React.useState<TColumn[]>([])
@@ -19,21 +18,13 @@ export const SortingPage: React.FC = () => {
       click: '',
     })
 
-  const randomArray = () => {
+  const addNewArray = () => {
     setAlgorithmStarted({
       algorithm: 'selection-sort',
       start: false,
       click: '',
     })
-    const array: TColumn[] = []
-    for (let i = 0; i <= Math.floor(Math.random() * 14) + 3; i++) {
-      array.push({
-        id: crypto.randomUUID(),
-        column: Math.round(Math.random() * 100),
-        status: ElementStates.Default,
-      })
-    }
-    setCreateArray(array)
+    setCreateArray([...randomArray()])
   }
 
   React.useEffect(() => {
@@ -55,6 +46,10 @@ export const SortingPage: React.FC = () => {
         )
         break
     }
+    if (!createArray.length) {
+      setCreateArray([...randomArray()])
+    }
+
     return () => setIsmount(false)
   }, [isMount])
 
@@ -118,7 +113,7 @@ export const SortingPage: React.FC = () => {
         <Button
           text='Новый массив'
           extraClass={styles.button}
-          onClick={randomArray}
+          onClick={addNewArray}
           disabled={algorithmStarted.start}
         />
       </div>

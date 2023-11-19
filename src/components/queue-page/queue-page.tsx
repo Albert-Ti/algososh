@@ -1,4 +1,5 @@
 import React from 'react'
+import { useForm } from '../../hooks'
 import { ElementStates } from '../../types/element-states'
 import { timeout } from '../../utils'
 import { Button } from '../ui/button/button'
@@ -6,12 +7,10 @@ import { Circle } from '../ui/circle/circle'
 import { Input } from '../ui/input/input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './queue-page.module.css'
-import { Queue } from './utils'
-
-const queue = new Queue<string>(7)
+import { queue } from './utils'
 
 export const QueuePage: React.FC = () => {
-  const [inputValue, setInputValue] = React.useState('')
+  const { values, setValues, handleChange } = useForm({ queue: '' })
   const [createArray, setCreateArray] = React.useState<
     (string | null)[] | null
   >([...queue.container])
@@ -22,7 +21,7 @@ export const QueuePage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    queue.enqueue(inputValue)
+    queue.enqueue(values.queue)
     setChangeState({
       ...changeState,
       tail: ElementStates.Changing,
@@ -33,7 +32,7 @@ export const QueuePage: React.FC = () => {
       ...changeState,
       tail: ElementStates.Default,
     })
-    setInputValue('')
+    setValues({ queue: '' })
   }
 
   const removeItem = async () => {
@@ -65,16 +64,15 @@ export const QueuePage: React.FC = () => {
       <div className={styles.content}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <Input
+            name='queue'
             extraClass={styles.input}
-            value={inputValue}
+            value={values.queue}
             isLimitText={true}
             maxLength={4}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setInputValue(e.target.value)
-            }
+            onChange={handleChange}
           />
           <Button
-            disabled={!inputValue && queue.getLength() === queue.tail}
+            disabled={!values.queue && queue.getLength() === queue.tail}
             type='submit'
             text='Добавить'
           />

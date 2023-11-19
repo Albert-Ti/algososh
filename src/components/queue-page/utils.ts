@@ -5,7 +5,7 @@ interface IQueue<T> {
   clear: () => void
 }
 
-export class Queue<T> implements IQueue<T> {
+class Queue<T> implements IQueue<T> {
   public container: (T | null)[] = []
   public head = 0
   public tail = 0
@@ -55,3 +55,5 @@ export class Queue<T> implements IQueue<T> {
     this.length = 0
   }
 }
+
+export const queue = new Queue<string>(7)

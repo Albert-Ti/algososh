@@ -7,34 +7,44 @@ import { Input } from '../ui/input/input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './stack-page.module.css'
 import { stack } from './utils'
+import { useForm } from '../../hooks'
 
 export const StackPage: React.FC = () => {
-  const [inputValue, setInputValue] = React.useState('')
+  const { values, setValues, handleChange } = useForm({ stack: '' })
   const [createArray, setCreateArray] = React.useState<string[]>([])
   const [changeState, setChangeState] = React.useState<ElementStates>()
+  const [loaderButton, setLoaderButton] = React.useState({
+    add: false,
+    remove: false,
+  })
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    stack.push(inputValue)
+    setLoaderButton({ add: true, remove: false })
+    stack.push(values.stack)
     setCreateArray([...stack.container])
 
     setChangeState(ElementStates.Changing)
     await timeout(500)
     setChangeState(ElementStates.Default)
+    setLoaderButton({ add: false, remove: false })
 
-    setInputValue('')
+    setValues({ stack: '' })
   }
 
   const removeItem = async () => {
+    setLoaderButton({ add: false, remove: true })
     stack.pop()
     setCreateArray([...stack.container])
     setChangeState(ElementStates.Changing)
     await timeout(500)
     setChangeState(ElementStates.Default)
+    setLoaderButton({ add: false, remove: false })
   }
 
   const clearItems = () => {
     stack.clear()
+    setCreateArray([])
   }
 
   return (
@@ -42,19 +52,25 @@ export const StackPage: React.FC = () => {
       <div className={styles.content}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <Input
-            value={inputValue}
+            name='stack'
+            value={values.stack}
             isLimitText={true}
             maxLength={4}
             extraClass={styles.input}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setInputValue(e.target.value)
-            }
+            onChange={handleChange}
           />
-          <Button disabled={!inputValue} type='submit' text='Добавить' />
+
+          <Button
+            disabled={!values.stack}
+            type='submit'
+            text='Добавить'
+            isLoader={loaderButton.add}
+          />
           <Button
             disabled={stack.getSize() === 0}
             onClick={removeItem}
             text='Удалить'
+            isLoader={loaderButton.remove}
           />
           <Button
             disabled={stack.getSize() === 0}
