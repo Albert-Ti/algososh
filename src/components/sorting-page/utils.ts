@@ -16,20 +16,19 @@ export const selectionSort = async (
       for (let j = i + 1; j < array.length; j++) {
         array[i].status = ElementStates.Changing
         array[j].status = ElementStates.Changing
+        setCreateArray([...array])
+        await timeout(500)
 
         if (array[j].column < array[indexMin].column) {
           indexMin = j
         }
         array[j].status = ElementStates.Default
+        setCreateArray([...array])
       }
-
       swap<TColumn>(array, i, indexMin)
-      await timeout(1000)
-
       array[i].status = ElementStates.Modified
-      array[array.length - 1].status = ElementStates.Modified
-      setCreateArray([...array])
     }
+    array[array.length - 1].status = ElementStates.Modified
   } else {
     for (let i = 0; i < array.length - 1; i++) {
       let indexMin = i
@@ -37,7 +36,9 @@ export const selectionSort = async (
       for (let j = i + 1; j < array.length; j++) {
         array[i].status = ElementStates.Changing
         array[j].status = ElementStates.Changing
+        setCreateArray([...array])
 
+        await timeout(500)
         if (array[j].column > array[indexMin].column) {
           indexMin = j
         }
@@ -45,12 +46,9 @@ export const selectionSort = async (
       }
 
       swap<TColumn>(array, i, indexMin)
-      await timeout(1000)
-
       array[i].status = ElementStates.Modified
-      array[array.length - 1].status = ElementStates.Modified
-      setCreateArray([...array])
     }
+    array[array.length - 1].status = ElementStates.Modified
   }
   setCreateArray(array)
   setAlgorithmStarted({ ...algorithmStarted, start: false, click: '' })
@@ -70,7 +68,7 @@ export const bubbleSort = async (
 
         if (array[j].column > array[j + 1].column) {
           swap<TColumn>(array, j, j + 1)
-          await timeout(1000)
+          await timeout(500)
           setCreateArray([...array])
         }
         array[j].status = ElementStates.Default
@@ -87,7 +85,7 @@ export const bubbleSort = async (
 
         if (array[j].column < array[j + 1].column) {
           swap<TColumn>(array, j, j + 1)
-          await timeout(1000)
+          await timeout(500)
           setCreateArray([...array])
         }
         array[j].status = ElementStates.Default
