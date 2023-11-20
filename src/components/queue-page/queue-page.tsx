@@ -75,11 +75,17 @@ export const QueuePage: React.FC = () => {
             disabled={!values.queue && queue.getLength() === queue.tail}
             type='submit'
             text='Добавить'
+            isLoader={
+              changeState.tail === ElementStates.Changing ? true : false
+            }
           />
           <Button
             disabled={queue.getLength() === 0}
             onClick={removeItem}
             text='Удалить'
+            isLoader={
+              changeState.head === ElementStates.Changing ? true : false
+            }
           />
           <Button
             disabled={queue.getLength() === 0}
