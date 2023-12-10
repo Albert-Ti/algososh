@@ -1,53 +1,84 @@
 import React from 'react'
-import { SolutionLayout } from '../ui/solution-layout/solution-layout'
-import { Input } from '../ui/input/input'
+import { useForm } from '../../hooks'
+import { ElementStates } from '../../types/element-states'
+import { swap } from '../../utils'
 import { Button } from '../ui/button/button'
-import styles from './string.module.css'
 import { Circle } from '../ui/circle/circle'
-
-const swapPairs = (arr: string[], start = 0, end = arr.length - 1) => {
-  if (start >= end) {
-    return arr
-  }
-  ;[arr[start], arr[end]] = [arr[end], arr[start]]
-
-  swapPairs(arr, (start += 1), (end -= 1))
-  return arr
-}
+import { Input } from '../ui/input/input'
+import { SolutionLayout } from '../ui/solution-layout/solution-layout'
+import styles from './string.module.css'
 
 export const StringComponent: React.FC = () => {
-  const [inputValue, setInputValue] = React.useState('')
-  const [textArray, setTextArray] = React.useState<string[] | null>(null)
+  const { values, handleChange } = useForm({ string: '' })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
+  const [createArray, setCreateArray] = React.useState<string[]>([])
+  const [reverseArray, setReverseArray] = React.useState(createArray)
+  const [isDone, setIsDone] = React.useState(true)
+
+  const handleClickSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setCreateArray(values.string.split(''))
+    setReverseArray([])
+    setIsDone(false)
   }
 
-  const handleClick = () => {
-    setTextArray(inputValue.split(''))
+  React.useEffect(() => {
+    setTimeout(() => {
+      const newTextArray = [...createArray]
+      swapItem(newTextArray)
+    }, 1000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createArray])
 
-    if (textArray) {
-      const newTextArray = [...textArray]
-
-      console.log(swapPairs(newTextArray))
-
-      setTimeout(() => {})
+  const swapItem = (arr: string[], start = 0, end = arr.length - 1) => {
+    if (start >= end) {
+      setIsDone(true)
+      return arr
     }
+    swap<string>(arr, start, end)
+    setReverseArray([...arr])
+    setTimeout(() => swapItem(arr, start + 1, end - 1), 1000)
   }
+
+  const disabledButton = !values.string || values.string.length > 11
 
   return (
     <SolutionLayout title='Строка'>
       <div className={styles.content}>
-        <div className={styles.wrapper}>
-          <Input onChange={handleChange} value={inputValue} />
-          <Button onClick={handleClick} text='Развернуть' />
-        </div>
-        <p className={styles.info}>Максимум — 11 символов</p>
+        <form onSubmit={handleClickSubmit} className={styles.form}>
+          <Input
+            name='string'
+            value={values.string}
+            onChange={handleChange}
+            isLimitText={true}
+            maxLength={11}
+          />
+          <Button
+            disabled={disabledButton}
+            isLoader={!isDone}
+            text='Развернуть'
+            type='submit'
+          />
+        </form>
       </div>
       <div className={styles.circles}>
-        {textArray?.map((text, i) => (
-          <Circle letter={text} key={i} />
-        ))}
+        {reverseArray.length
+          ? reverseArray.map((text, i) => (
+              <Circle
+                state={
+                  (createArray.length && reverseArray[i] !== createArray[i]) ||
+                  isDone
+                    ? ElementStates.Modified
+                    : reverseArray[i - 1] === createArray[i - 1] &&
+                      reverseArray[i + 1] === createArray[i + 1]
+                    ? ElementStates.Default
+                    : ElementStates.Changing
+                }
+                letter={text}
+                key={i}
+              />
+            ))
+          : createArray.map((text, i) => <Circle letter={text} key={i} />)}
       </div>
     </SolutionLayout>
   )
