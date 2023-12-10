@@ -1,4 +1,5 @@
 import { DEFAULT_COLOR, MODIFIED_COLOR } from '../support/constants'
+import { SHORT_DELAY_IN_MS } from '../../src/constants/delays'
 
 describe('String component tests', () => {
   beforeEach(() => {
@@ -27,8 +28,7 @@ describe('String component tests', () => {
       .parent()
       .should('have.css', 'border-color', DEFAULT_COLOR)
 
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(500)
+    cy.wait(SHORT_DELAY_IN_MS)
 
     cy.get('@circles')
       .first()

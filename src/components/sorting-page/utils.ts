@@ -2,6 +2,7 @@ import { Direction } from '../../types/direction'
 import { ElementStates } from '../../types/element-states'
 import { swap, timeout } from '../../global-utils'
 import { TAlgorithmStarted, TColumn } from './types'
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 
 export const selectionSort = async (
   array: TColumn[],
@@ -18,7 +19,7 @@ export const selectionSort = async (
         array[i].status = ElementStates.Changing
         array[j].status = ElementStates.Changing
         setCreateArray([...array])
-        await timeout(500)
+        await timeout(SHORT_DELAY_IN_MS)
 
         if (array[j].column < array[indexMin].column) {
           indexMin = j
@@ -40,7 +41,7 @@ export const selectionSort = async (
         setCreateArray([...array])
 
         count! += 1
-        await timeout(500)
+        await timeout(SHORT_DELAY_IN_MS)
         if (array[j].column > array[indexMin].column) {
           indexMin = j
         }
@@ -75,7 +76,7 @@ export const bubbleSort = async (
 
         if (array[j].column > array[j + 1].column) {
           swap<TColumn>(array, j, j + 1)
-          await timeout(500)
+          await timeout(SHORT_DELAY_IN_MS)
           setCreateArray([...array])
         }
         array[j].status = ElementStates.Default
@@ -93,7 +94,7 @@ export const bubbleSort = async (
         count! += 1
         if (array[j].column < array[j + 1].column) {
           swap<TColumn>(array, j, j + 1)
-          await timeout(500)
+          await timeout(SHORT_DELAY_IN_MS)
           setCreateArray([...array])
         }
         array[j].status = ElementStates.Default

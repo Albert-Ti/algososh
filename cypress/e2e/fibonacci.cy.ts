@@ -1,4 +1,6 @@
-/* eslint-disable cypress/no-unnecessary-waiting */
+import { SHORT_DELAY_IN_MS } from '../../src/constants/delays'
+import { CIRCLE_SELECTOR } from '../support/constants'
+
 describe('Fibonacci component tests', () => {
   beforeEach(() => {
     cy.visit('/fibonacci')
@@ -12,19 +14,20 @@ describe('Fibonacci component tests', () => {
 
   it('Check that the numbers are generated correctly', () => {
     cy.get('input').type('8{enter}')
+    cy.get(CIRCLE_SELECTOR).as('circleItem')
 
-    cy.get('[class*=circle]').contains('1')
-    cy.wait(500)
-    cy.get('[class*=circle]').contains('2')
-    cy.wait(500)
-    cy.get('[class*=circle]').contains('3')
-    cy.wait(500)
-    cy.get('[class*=circle]').contains('5')
-    cy.wait(500)
-    cy.get('[class*=circle]').contains('8')
-    cy.wait(500)
-    cy.get('[class*=circle]').contains('13')
-    cy.wait(500)
-    cy.get('[class*=circle]').contains('21')
+    cy.get('@circleItem').contains('1')
+    cy.wait(SHORT_DELAY_IN_MS)
+    cy.get('@circleItem').contains('2')
+    cy.wait(SHORT_DELAY_IN_MS)
+    cy.get('@circleItem').contains('3')
+    cy.wait(SHORT_DELAY_IN_MS)
+    cy.get('@circleItem').contains('5')
+    cy.wait(SHORT_DELAY_IN_MS)
+    cy.get('@circleItem').contains('8')
+    cy.wait(SHORT_DELAY_IN_MS)
+    cy.get('@circleItem').contains('13')
+    cy.wait(SHORT_DELAY_IN_MS)
+    cy.get('@circleItem').contains('21')
   })
 })

@@ -8,6 +8,7 @@ import { Input } from '../ui/input/input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './queue-page.module.css'
 import { queue } from './utils'
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 
 export const QueuePage: React.FC = () => {
   const { values, setValues, handleChange } = useForm({ queue: '' })
@@ -26,7 +27,7 @@ export const QueuePage: React.FC = () => {
       ...changeState,
       tail: ElementStates.Changing,
     })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setCreateArray([...queue.container])
     setChangeState({
       ...changeState,
@@ -44,7 +45,7 @@ export const QueuePage: React.FC = () => {
         ...changeState,
         head: ElementStates.Changing,
       })
-      await timeout(500)
+      await timeout(SHORT_DELAY_IN_MS)
       setChangeState({
         ...changeState,
         head: ElementStates.Default,

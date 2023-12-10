@@ -1,3 +1,4 @@
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 import { timeout } from '../../global-utils'
 import { ElementStates } from '../../types/element-states'
 import { TColumn } from './types'
@@ -69,7 +70,7 @@ describe('Testing bubble sort algorithms', () => {
       click: '',
     })
 
-    await timeout(newArray.length * 500)
+    await timeout(newArray.length * SHORT_DELAY_IN_MS)
     expect(array.length === newArray.length).toBe(true)
   })
 })
@@ -122,7 +123,7 @@ describe('Testing selection sort algorithms', () => {
       click: '',
     })
 
-    await timeout(newArray.length * 500)
+    await timeout(newArray.length * SHORT_DELAY_IN_MS)
     expect(array.length === newArray.length).toBe(true)
   })
 })

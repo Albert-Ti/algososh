@@ -8,6 +8,7 @@ import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './stack-page.module.css'
 import { stack } from './utils'
 import { useForm } from '../../hooks'
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 
 export const StackPage: React.FC = () => {
   const { values, setValues, handleChange } = useForm({ stack: '' })
@@ -25,7 +26,7 @@ export const StackPage: React.FC = () => {
     setCreateArray([...stack.container])
 
     setChangeState(ElementStates.Changing)
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setChangeState(ElementStates.Default)
     setLoaderButton({ add: false, remove: false })
 
@@ -37,7 +38,7 @@ export const StackPage: React.FC = () => {
     stack.pop()
     setCreateArray([...stack.container])
     setChangeState(ElementStates.Changing)
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setChangeState(ElementStates.Default)
     setLoaderButton({ add: false, remove: false })
   }

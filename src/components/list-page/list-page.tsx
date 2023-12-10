@@ -10,6 +10,7 @@ import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './list-page.module.css'
 import { TIsAction } from './types'
 import { counter, list, Node } from './utils'
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 
 export const ListPage: React.FC = () => {
   const { values, setValues, handleChange } = useForm({ list: '', index: '' })
@@ -36,7 +37,7 @@ export const ListPage: React.FC = () => {
 
     if (+values.index < createArray.length) {
       await counter(+values.index, setCountForIndex)
-      await timeout(500)
+      await timeout(SHORT_DELAY_IN_MS)
       list.insertByIndex(values.list, +values.index)
       setCreateArray([...list.toArray()])
     }
@@ -51,7 +52,7 @@ export const ListPage: React.FC = () => {
 
     if (+values.index < createArray.length) {
       await counter(+values.index, setCountForIndex)
-      await timeout(500)
+      await timeout(SHORT_DELAY_IN_MS)
       list.removeByIndex(+values.index)
       setCreateArray([...list.toArray()])
     }
@@ -65,11 +66,11 @@ export const ListPage: React.FC = () => {
     list.preppend(values.list)
 
     setIsAction({ ...isAction, add: { head: true } })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setIsAction({ ...isAction, add: { head: false } })
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { head: true } })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { head: false } })
 
@@ -81,11 +82,11 @@ export const ListPage: React.FC = () => {
     list.append(values.list)
 
     setIsAction({ ...isAction, add: { tail: true } })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setIsAction({ ...isAction, add: { tail: false } })
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { tail: true } })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { tail: false } })
 
@@ -95,7 +96,7 @@ export const ListPage: React.FC = () => {
   const deleteInHead = async () => {
     list.removeFirst()
     setIsAction({ ...isAction, remove: { head: true } })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setIsAction({ ...isAction, remove: { head: false } })
     setCreateArray([...list.toArray()])
   }
@@ -103,7 +104,7 @@ export const ListPage: React.FC = () => {
   const deleteInTail = async () => {
     list.removeFirst()
     setIsAction({ ...isAction, remove: { tail: true } })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setIsAction({ ...isAction, remove: { tail: false } })
     setCreateArray([...list.toArray()])
   }
