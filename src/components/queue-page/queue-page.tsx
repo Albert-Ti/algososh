@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm } from '../../hooks'
 import { ElementStates } from '../../types/element-states'
-import { timeout } from '../../utils'
+import { timeout } from '../../global-utils'
 import { Button } from '../ui/button/button'
 import { Circle } from '../ui/circle/circle'
 import { Input } from '../ui/input/input'
@@ -72,6 +72,7 @@ export const QueuePage: React.FC = () => {
             onChange={handleChange}
           />
           <Button
+            data-test='submit-button'
             disabled={!values.queue && queue.getLength() === queue.tail}
             type='submit'
             text='Добавить'
@@ -80,6 +81,7 @@ export const QueuePage: React.FC = () => {
             }
           />
           <Button
+            data-test='remove-button'
             disabled={queue.getLength() === 0}
             onClick={removeItem}
             text='Удалить'
@@ -88,6 +90,7 @@ export const QueuePage: React.FC = () => {
             }
           />
           <Button
+            data-test='clear-button'
             disabled={queue.getLength() === 0}
             onClick={clearItems}
             extraClass={styles.clear}

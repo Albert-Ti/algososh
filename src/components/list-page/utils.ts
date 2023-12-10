@@ -1,4 +1,4 @@
-import { timeout } from '../../utils'
+import { timeout } from '../../global-utils'
 
 export class Node<T> {
   value: T

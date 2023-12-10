@@ -1,6 +1,6 @@
 import React from 'react'
 import { ElementStates } from '../../types/element-states'
-import { timeout } from '../../utils'
+import { timeout } from '../../global-utils'
 import { Button } from '../ui/button/button'
 import { Circle } from '../ui/circle/circle'
 import { Input } from '../ui/input/input'
@@ -61,18 +61,21 @@ export const StackPage: React.FC = () => {
           />
 
           <Button
+            data-test='submit-button'
             disabled={!values.stack}
             type='submit'
             text='Добавить'
             isLoader={loaderButton.add}
           />
           <Button
+            data-test='remove-button'
             disabled={stack.getSize() === 0}
             onClick={removeItem}
             text='Удалить'
             isLoader={loaderButton.remove}
           />
           <Button
+            data-test='clear-button'
             disabled={stack.getSize() === 0}
             onClick={clearItems}
             extraClass={styles.clear}
