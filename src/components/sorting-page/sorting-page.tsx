@@ -117,7 +117,7 @@ export const SortingPage: React.FC = () => {
           disabled={algorithmStarted.start}
         />
       </div>
-      <div className={styles.column}>
+      <div className={styles.column} data-testid='sorting-column'>
         {createArray.map(({ id, column, status }) => (
           <Column key={id} index={column} state={status} />
         ))}

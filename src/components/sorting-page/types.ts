@@ -12,7 +12,7 @@ export type TFilter = {
 }
 
 export type TColumn = {
-  id: string
+  id: number
   column: number
   status: ElementStates
 }

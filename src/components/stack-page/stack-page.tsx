@@ -1,6 +1,6 @@
 import React from 'react'
 import { ElementStates } from '../../types/element-states'
-import { timeout } from '../../utils'
+import { timeout } from '../../global-utils'
 import { Button } from '../ui/button/button'
 import { Circle } from '../ui/circle/circle'
 import { Input } from '../ui/input/input'
@@ -8,6 +8,7 @@ import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './stack-page.module.css'
 import { stack } from './utils'
 import { useForm } from '../../hooks'
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 
 export const StackPage: React.FC = () => {
   const { values, setValues, handleChange } = useForm({ stack: '' })
@@ -25,7 +26,7 @@ export const StackPage: React.FC = () => {
     setCreateArray([...stack.container])
 
     setChangeState(ElementStates.Changing)
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setChangeState(ElementStates.Default)
     setLoaderButton({ add: false, remove: false })
 
@@ -37,7 +38,7 @@ export const StackPage: React.FC = () => {
     stack.pop()
     setCreateArray([...stack.container])
     setChangeState(ElementStates.Changing)
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setChangeState(ElementStates.Default)
     setLoaderButton({ add: false, remove: false })
   }
@@ -61,18 +62,21 @@ export const StackPage: React.FC = () => {
           />
 
           <Button
+            data-test='submit-button'
             disabled={!values.stack}
             type='submit'
             text='Добавить'
             isLoader={loaderButton.add}
           />
           <Button
+            data-test='remove-button'
             disabled={stack.getSize() === 0}
             onClick={removeItem}
             text='Удалить'
             isLoader={loaderButton.remove}
           />
           <Button
+            data-test='clear-button'
             disabled={stack.getSize() === 0}
             onClick={clearItems}
             extraClass={styles.clear}

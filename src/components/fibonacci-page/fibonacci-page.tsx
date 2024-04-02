@@ -5,6 +5,7 @@ import { Circle } from '../ui/circle/circle'
 import { Input } from '../ui/input/input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './fibonacci-page.module.css'
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 
 export const FibonacciPage: React.FC = () => {
   const { values, handleChange } = useForm({ fib: '' })
@@ -26,7 +27,7 @@ export const FibonacciPage: React.FC = () => {
         setTimeout(() => {
           arr.push(arr[i] + arr[i + 1])
           resultFibonacci(i + 1)
-        }, 500)
+        }, SHORT_DELAY_IN_MS)
       } else {
         setIsDone(true)
       }

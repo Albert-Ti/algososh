@@ -1,12 +1,13 @@
 import React from 'react'
 import { useForm } from '../../hooks'
 import { ElementStates } from '../../types/element-states'
-import { swap } from '../../utils'
+import { swap } from '../../global-utils'
 import { Button } from '../ui/button/button'
 import { Circle } from '../ui/circle/circle'
 import { Input } from '../ui/input/input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './string.module.css'
+import { DELAY_IN_MS } from '../../constants/delays'
 
 export const StringComponent: React.FC = () => {
   const { values, handleChange } = useForm({ string: '' })
@@ -26,13 +27,13 @@ export const StringComponent: React.FC = () => {
     setTimeout(() => {
       const newTextArray = [...createArray]
       swapItem(newTextArray)
-    }, 1000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, DELAY_IN_MS)
   }, [createArray])
 
   const swapItem = (arr: string[], start = 0, end = arr.length - 1) => {
     if (start >= end) {
       setIsDone(true)
+      setReverseArray(arr)
       return arr
     }
     swap<string>(arr, start, end)
@@ -61,7 +62,7 @@ export const StringComponent: React.FC = () => {
           />
         </form>
       </div>
-      <div className={styles.circles}>
+      <div className={styles.circles} data-testid='circles'>
         {reverseArray.length
           ? reverseArray.map((text, i) => (
               <Circle

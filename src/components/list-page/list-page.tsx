@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm } from '../../hooks'
 import { ElementStates } from '../../types/element-states'
-import { timeout } from '../../utils'
+import { timeout } from '../../global-utils'
 import { Button } from '../ui/button/button'
 import { Circle } from '../ui/circle/circle'
 import { ArrowIcon } from '../ui/icons/arrow-icon'
@@ -10,6 +10,7 @@ import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './list-page.module.css'
 import { TIsAction } from './types'
 import { counter, list, Node } from './utils'
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 
 export const ListPage: React.FC = () => {
   const { values, setValues, handleChange } = useForm({ list: '', index: '' })
@@ -36,7 +37,7 @@ export const ListPage: React.FC = () => {
 
     if (+values.index < createArray.length) {
       await counter(+values.index, setCountForIndex)
-      await timeout(1000)
+      await timeout(SHORT_DELAY_IN_MS)
       list.insertByIndex(values.list, +values.index)
       setCreateArray([...list.toArray()])
     }
@@ -51,7 +52,7 @@ export const ListPage: React.FC = () => {
 
     if (+values.index < createArray.length) {
       await counter(+values.index, setCountForIndex)
-      await timeout(1000)
+      await timeout(SHORT_DELAY_IN_MS)
       list.removeByIndex(+values.index)
       setCreateArray([...list.toArray()])
     }
@@ -65,11 +66,11 @@ export const ListPage: React.FC = () => {
     list.preppend(values.list)
 
     setIsAction({ ...isAction, add: { head: true } })
-    await timeout(1000)
+    await timeout(SHORT_DELAY_IN_MS)
     setIsAction({ ...isAction, add: { head: false } })
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { head: true } })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { head: false } })
 
@@ -81,11 +82,11 @@ export const ListPage: React.FC = () => {
     list.append(values.list)
 
     setIsAction({ ...isAction, add: { tail: true } })
-    await timeout(1000)
+    await timeout(SHORT_DELAY_IN_MS)
     setIsAction({ ...isAction, add: { tail: false } })
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { tail: true } })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setCreateArray([...list.toArray()])
     setIsAction({ ...isAction, state: { tail: false } })
 
@@ -95,7 +96,7 @@ export const ListPage: React.FC = () => {
   const deleteInHead = async () => {
     list.removeFirst()
     setIsAction({ ...isAction, remove: { head: true } })
-    await timeout(1000)
+    await timeout(SHORT_DELAY_IN_MS)
     setIsAction({ ...isAction, remove: { head: false } })
     setCreateArray([...list.toArray()])
   }
@@ -103,7 +104,7 @@ export const ListPage: React.FC = () => {
   const deleteInTail = async () => {
     list.removeFirst()
     setIsAction({ ...isAction, remove: { tail: true } })
-    await timeout(1000)
+    await timeout(SHORT_DELAY_IN_MS)
     setIsAction({ ...isAction, remove: { tail: false } })
     setCreateArray([...list.toArray()])
   }
@@ -194,6 +195,7 @@ export const ListPage: React.FC = () => {
       <div className={styles.content}>
         <form onSubmit={addToTail} className={styles.form}>
           <Input
+            data-test='text-input'
             name='list'
             onChange={handleChange}
             value={values.list}
@@ -202,6 +204,7 @@ export const ListPage: React.FC = () => {
             extraClass={styles.input}
           />
           <Button
+            data-test='addToHead-button'
             disabled={!values.list || values.index ? true : false}
             onClick={addToHead}
             text='Добавить в head'
@@ -209,6 +212,7 @@ export const ListPage: React.FC = () => {
             isLoader={isAction.add.head}
           />
           <Button
+            data-test='addToTail-button'
             disabled={!values.list || values.index ? true : false}
             type='submit'
             text='Добавить в tail'
@@ -216,6 +220,7 @@ export const ListPage: React.FC = () => {
             isLoader={isAction.add.tail}
           />
           <Button
+            data-test='removeInHead-button'
             onClick={deleteInHead}
             text='Удалить из head'
             extraClass={styles.button}
@@ -223,6 +228,7 @@ export const ListPage: React.FC = () => {
             disabled={!createArray.length}
           />
           <Button
+            data-test='removeInTail-button'
             onClick={deleteInTail}
             text='Удалить из tail'
             extraClass={styles.button}
@@ -232,6 +238,7 @@ export const ListPage: React.FC = () => {
         </form>
         <form onSubmit={addByIndex} className={styles.form}>
           <Input
+            data-test='index-input'
             name='index'
             value={values.index}
             onChange={handleChange}
@@ -240,6 +247,7 @@ export const ListPage: React.FC = () => {
             extraClass={styles.input}
           />
           <Button
+            data-test='addByIndex-button'
             disabled={
               !values.list ||
               !values.index ||
@@ -251,6 +259,7 @@ export const ListPage: React.FC = () => {
             isLoader={isActionOnIndex.add}
           />
           <Button
+            data-test='removeByIndex-button'
             disabled={!values.index || +values.index > createArray.length - 1}
             onClick={removeByIndex}
             text='Удалить по индексу'

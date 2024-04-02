@@ -1,13 +1,14 @@
 import React from 'react'
 import { useForm } from '../../hooks'
 import { ElementStates } from '../../types/element-states'
-import { timeout } from '../../utils'
+import { timeout } from '../../global-utils'
 import { Button } from '../ui/button/button'
 import { Circle } from '../ui/circle/circle'
 import { Input } from '../ui/input/input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import styles from './queue-page.module.css'
 import { queue } from './utils'
+import { SHORT_DELAY_IN_MS } from '../../constants/delays'
 
 export const QueuePage: React.FC = () => {
   const { values, setValues, handleChange } = useForm({ queue: '' })
@@ -26,7 +27,7 @@ export const QueuePage: React.FC = () => {
       ...changeState,
       tail: ElementStates.Changing,
     })
-    await timeout(500)
+    await timeout(SHORT_DELAY_IN_MS)
     setCreateArray([...queue.container])
     setChangeState({
       ...changeState,
@@ -44,7 +45,7 @@ export const QueuePage: React.FC = () => {
         ...changeState,
         head: ElementStates.Changing,
       })
-      await timeout(500)
+      await timeout(SHORT_DELAY_IN_MS)
       setChangeState({
         ...changeState,
         head: ElementStates.Default,
@@ -72,6 +73,7 @@ export const QueuePage: React.FC = () => {
             onChange={handleChange}
           />
           <Button
+            data-test='submit-button'
             disabled={!values.queue && queue.getLength() === queue.tail}
             type='submit'
             text='Добавить'
@@ -80,6 +82,7 @@ export const QueuePage: React.FC = () => {
             }
           />
           <Button
+            data-test='remove-button'
             disabled={queue.getLength() === 0}
             onClick={removeItem}
             text='Удалить'
@@ -88,6 +91,7 @@ export const QueuePage: React.FC = () => {
             }
           />
           <Button
+            data-test='clear-button'
             disabled={queue.getLength() === 0}
             onClick={clearItems}
             extraClass={styles.clear}
